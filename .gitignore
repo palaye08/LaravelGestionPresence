@@ -17,3 +17,5 @@ yarn-error.log
 /.fleet
 /.idea
 /.vscode
+
+/home/abdoulaye/Documents/GestionPresenceLaravel/firebase_credentials.json
