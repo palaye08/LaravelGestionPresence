@@ -18,4 +18,4 @@ yarn-error.log
 /.idea
 /.vscode
 
-/home/abdoulaye/Documents/GestionPresenceLaravel/firebase_credentials.json
+firebase_credentials.json
