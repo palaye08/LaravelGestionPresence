@@ -2,8 +2,12 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\TestController;
+use App\Http\Controllers\AuthController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\ApprenantController;
+use App\Http\Controllers\PromotionController;
+use App\Http\Controllers\ReferentielController;
+
 
 
 /*
@@ -17,12 +21,61 @@ use App\Http\Controllers\UserController;
 |
 */
 
-// Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-//     return $request->user();
-// });
+Route::middleware('auth:api')->get('/user', function (Request $request) {
+    return $request->user();
+});
+//->middleware('auth:api')
+Route::post('/logout', [AuthController::class, 'logout']);
 
 
-// Route::get('/test', [TestController::class, 'TestMethod']);
+Route::prefix('/v1')->group(function () { 
 
-Route::post('/users', [UserController::class, 'store']);
+    // Authentification
+Route::post('/login', [AuthController::class, 'login']);
+
+    // users 
+ Route::prefix('/')->group(function () {  
+Route::post('/user', [UserController::class, 'store']);
+Route::get('/users', [UserController::class, 'index']);
+Route::patch('/users/{id}', [UserController::class, 'update']);
+    
+});
+Route::prefix('/')->group(function () {  
+// referentiels
+Route::get('/referentiels', [ReferentielController::class, 'getActiveReferentiels']);
+Route::post('/referentiel', [ReferentielController::class, 'createReferentiel']);
+Route::get('/referentiels/etat', [ReferentielController::class, 'getReferentielsByEtat']);
+Route::get('/referentiels/{id}/competences', [ReferentielController::class, 'getReferentielCompetences']);
+Route::get('/referentiels/{id}/modules', [ReferentielController::class, 'getReferentielModules']);
+Route::patch('/referentiels/{id}', [ReferentielController::class, 'updateReferentiel']);
+Route::delete('/referentiel/{id}', [ReferentielController::class,'softDeleteReferentiel']);
+Route::get('/referentiels/deleted', [ReferentielController::class, 'getDeletedReferentiels']);
+});
+
+// Promotions
+Route::prefix('/promotions')->group(function () { 
+    Route::group(['middleware' => 'promotion.closed'], function () {  
+ Route::post('/', [PromotionController::class, 'createPromotion']);
+ Route::patch('/{id}', [PromotionController::class, 'updatePromotion']);
+ Route::patch('/{id}/referentiels', [PromotionController::class, 'updatePromotionReferentiels']);
+
+ });
+ Route::get('/', [PromotionController::class, 'getAllPromotions']);
+ Route::get('/current', [PromotionController::class, 'getCurrentPromotion']);
+ Route::get('/{id}/referentiels', [PromotionController::class, 'getActiveReferentiels']);
+}); 
+//   appreants
+Route::prefix('/')->group(function () { 
+ Route::post('/apprenants', [ApprenantController::class, 'createApprenant']);
+}); 
+
+ }); 
+
+
+
+
+
+
+
+
 

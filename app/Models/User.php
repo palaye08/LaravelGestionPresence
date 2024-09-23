@@ -22,11 +22,12 @@ class User extends Authenticatable
         'prenom',
         'telephone',
         'email',
+        'password',
         'statu',
         'photo',
-        'role_id',
-        
+        'role', // Ajoute le champ role ici
     ];
+    
 
     /**
      * The attributes that should be hidden for serialization.

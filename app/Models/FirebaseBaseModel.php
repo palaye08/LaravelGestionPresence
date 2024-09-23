@@ -21,7 +21,6 @@ abstract class FirebaseBaseModel
             $this->database = $factory->createDatabase();
             $this->tableName = $this->getTable();
             
-            // Vérification de la connexion
             $this->database->getReference($this->tableName)->getValue();
         } catch (DatabaseException $e) {
             throw new \Exception("Impossible de se connecter à Firebase: " . $e->getMessage());
@@ -38,11 +37,12 @@ abstract class FirebaseBaseModel
 
     public function find($id)
     {
+                
         return $this->database->getReference($this->tableName)->getChild($id)->getValue();
     }
 
     public function all()
-    {
+    {    
         $result = $this->database->getReference($this->tableName)->getValue();
         return $result ?: [];
     }
@@ -56,5 +56,15 @@ abstract class FirebaseBaseModel
     public function delete($id)
     {
         return $this->database->getReference($this->tableName)->getChild($id)->remove();
+    }
+
+    public function restore($id){
+        $this->database->getReference($this->tableName)->getChild($id)->update(['statut' => 'actif']);
+        return $this->find($id);
+    }
+    public function softDelete($id)
+    {
+        $this->database->getReference($this->tableName)->getChild($id)->update(['statut' => 'inactif']);
+        return $this->find($id);
     }
 }

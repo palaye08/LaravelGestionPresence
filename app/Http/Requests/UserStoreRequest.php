@@ -34,7 +34,7 @@ class UserStoreRequest extends FormRequest
                     return !$this->userRepository->findByTelephone($this->telephone);
                 }),
             ],
-            'role' => 'required|in:Admin,Coach,CM,Manager',
+            'role' => 'required|in:Admin,Coach,CM,Manager,Apprenant',
             'email' => [
                 'required',
                 'email',

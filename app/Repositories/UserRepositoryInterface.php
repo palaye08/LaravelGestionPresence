@@ -10,5 +10,7 @@ interface UserRepositoryInterface{
     public function delete($id);
     public function findByTelephone($telephone);
     public function findByEmail($email);
+    public function findByRole($role);
+    
 
 }

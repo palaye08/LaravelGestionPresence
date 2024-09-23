@@ -10,16 +10,42 @@
             "url": "http://localhost:8000",
             "description": "Serveur Local"
         }
-    ],
+    ],"components": {
+        "securitySchemes": {
+            "BearerAuth": {
+                "type": "http",
+                "scheme": "bearer",
+                "bearerFormat": "JWT"
+            }
+        }
+    },
     "paths": {
-        "/api/users": {
+        "/api/v1/login": {
             "post": {
-                "summary": "Methode de creation",
-                "description": "This endpoint is used to test the functionality of the TestController.",
-                "operationId": "store",
+                "summary": "Login",
+                "description": "This endpoint is used for user authentication and returns a Bearer token.",
+                "operationId": "login",
                 "tags": [
-                    "Users"
+                    "Authentication"
                 ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "email": {
+                                        "type": "string"
+                                    },
+                                    "password": {
+                                        "type": "string"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
                 "responses": {
                     "200": {
                         "description": "Successful response",
@@ -28,9 +54,97 @@
                                 "schema": {
                                     "type": "object",
                                     "properties": {
-                                        "message": {
+                                        "token": {
                                             "type": "string",
-                                            "example": "Test method executed successfully"
+                                            "example": "Bearer your_jwt_token_here"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    }
+                }
+            }
+        },
+        "/api/v1/user": {
+            "post": {
+                "summary": "Create a new user",
+                "description": "This endpoint is used to create a new user.",
+                "operationId": "store",
+                "tags": [
+                    "Users"
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "nom": {
+                                        "type": "string"
+                                    },
+                                    "prenom": {
+                                        "type": "string"
+                                    },
+                                    "adresse": {
+                                        "type": "string"
+                                    },
+                                    "telephone": {
+                                        "type": "string"
+                                    },
+                                    "email": {
+                                        "type": "string"
+                                    },
+                                    "password": {
+                                        "type": "string"
+                                    },
+                                    "role": {
+                                        "type": "string"
+                                    },
+                                    "statu": {
+                                        "type": "string"
+                                    },
+                                    "photo": {
+                                        "type": "string",
+                                        "format": "binary"
+                                    },
+                                    "fonction": {
+                                        "type": "string"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successful response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "id": {
+                                            "type": "string"
+                                        },
+                                        "nom": {
+                                            "type": "string"
+                                        },
+                                        "prenom": {
+                                            "type": "string"
+                                        },
+                                        "email": {
+                                            "type": "string"
+                                        },
+                                        "role": {
+                                            "type": "string"
+                                        },
+                                        "statu": {
+                                            "type": "string"
                                         }
                                     }
                                 }
@@ -42,6 +156,1049 @@
                     }
                 }
             }
+        },
+        "/api/v1/users": {
+            "get": {
+                "summary": "Get all users or filter by role",
+                "description": "This endpoint is used to retrieve a list of users. You can filter users by role using the query parameter 'role'.",
+                "operationId": "index",
+                "tags": [
+                    "Users"
+                ],
+                "parameters": [
+                    {
+                        "name": "role",
+                        "in": "query",
+                        "description": "Filter users by role",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "type": "object",
+                                        "properties": {
+                                            "id": {
+                                                "type": "string"
+                                            },
+                                            "nom": {
+                                                "type": "string"
+                                            },
+                                            "prenom": {
+                                                "type": "string"
+                                            },
+                                            "adresse": {
+                                                "type": "string"
+                                            },
+                                            "telephone": {
+                                                "type": "string"
+                                            },
+                                            "role": {
+                                                "type": "string"
+                                            },
+                                            "email": {
+                                                "type": "string"
+                                            },
+                                            "statu": {
+                                                "type": "string"
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error"
+                    }
+                }
+            }
+        },
+        "/api/v1/users/{id}": {
+            "patch": {
+                "summary": "Update a user",
+                "description": "This endpoint is used to update a user's information.",
+                "operationId": "update",
+                "tags": [
+                    "Users"
+                ],
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "User ID",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "nom": {
+                                        "type": "string"
+                                    },
+                                    "prenom": {
+                                        "type": "string"
+                                    },
+                                    "adresse": {
+                                        "type": "string"
+                                    },
+                                    "telephone": {
+                                        "type": "string"
+                                    },
+                                    "email": {
+                                        "type": "string"
+                                    },
+                                    "password": {
+                                        "type": "string"
+                                    },
+                                    "role": {
+                                        "type": "string"
+                                    },
+                                    "statu": {
+                                        "type": "string"
+                                    },
+                                    "photo": {
+                                        "type": "string",
+                                        "format": "binary"
+                                    },
+                                    "fonction": {
+                                        "type": "string"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successful response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "id": {
+                                            "type": "string"
+                                        },
+                                        "nom": {
+                                            "type": "string"
+                                        },
+                                        "prenom": {
+                                            "type": "string"
+                                        },
+                                        "email": {
+                                            "type": "string"
+                                        },
+                                        "role": {
+                                            "type": "string"
+                                        },
+                                        "statu": {
+                                            "type": "string"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request"
+                    },
+                    "500": {
+                        "description": "Internal Server Error"
+                    }
+                }
+            }
+        },
+        "/api/v1/referentiels": {
+            "get": {
+                "summary": "Get all active referentiels",
+                "description": "This endpoint is used to retrieve a list of active referentiels.",
+                "operationId": "getActiveReferentiels",
+                "tags": [
+                    "Referentiels"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "type": "object",
+                                        "properties": {
+                                            "id": {
+                                                "type": "string"
+                                            },
+                                            "libelle": {
+                                                "type": "string"
+                                            },
+                                            "etat": {
+                                                "type": "string"
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error"
+                    }
+                }
+            }
+        },
+        "/api/v1/referentiel": {
+            "post": {
+                "summary": "Create a new referentiel",
+                "description": "This endpoint is used to create a new referentiel.",
+                "operationId": "createReferentiel",
+                "tags": [
+                    "Referentiels"
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "libelle": {
+                                        "type": "string"
+                                    },
+                                    "etat": {
+                                        "type": "string"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successful response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "id": {
+                                            "type": "string"
+                                        },
+                                        "libelle": {
+                                            "type": "string"
+                                        },
+                                        "etat": {
+                                            "type": "string"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error"
+                    }
+                }
+            }
+        },
+        "/api/v1/referentiels/etat": {
+            "get": {
+                "summary": "Get referentiels by state",
+                "description": "This endpoint is used to retrieve referentiels by their state.",
+                "operationId": "getReferentielsByEtat",
+                "tags": [
+                    "Referentiels"
+                ],
+                "parameters": [
+                    {
+                        "name": "etat",
+                        "in": "query",
+                        "description": "Filter referentiels by state",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "type": "object",
+                                        "properties": {
+                                            "id": {
+                                                "type": "string"
+                                            },
+                                            "libelle": {
+                                                "type": "string"
+                                            },
+                                            "etat": {
+                                                "type": "string"
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error"
+                    }
+                }
+            }
+        },
+        "/api/v1/referentiels/{id}/competences": {
+            "get": {
+                "summary": "Get referentiel competences",
+                "description": "This endpoint is used to retrieve competences of a referentiel.",
+                "operationId": "getReferentielCompetences",
+                "tags": [
+                    "Referentiels"
+                ],
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Referentiel ID",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "type": "object",
+                                        "properties": {
+                                            "id": {
+                                                "type": "string"
+                                            },
+                                            "libelle": {
+                                                "type": "string"
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error"
+                    }
+                }
+            }
+        },
+        "/api/v1/referentiels/{id}/modules": {
+            "get": {
+                "summary": "Get referentiel modules",
+                "description": "This endpoint is used to retrieve modules of a referentiel.",
+                "operationId": "getReferentielModules",
+                "tags": [
+                    "Referentiels"
+                ],
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Referentiel ID",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "type": "object",
+                                        "properties": {
+                                            "id": {
+                                                "type": "string"
+                                            },
+                                            "libelle": {
+                                                "type": "string"
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error"
+                    }
+                }
+            }
+        },
+        "/api/v1/referentiels/{id}": {
+            "patch": {
+                "summary": "Update a referentiel",
+                "description": "This endpoint is used to update a referentiel's information.",
+                "operationId": "updateReferentiel",
+                "tags": [
+                    "Referentiels"
+                ],
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Referentiel ID",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "libelle": {
+                                        "type": "string"
+                                    },
+                                    "etat": {
+                                        "type": "string"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successful response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "id": {
+                                            "type": "string"
+                                        },
+                                        "libelle": {
+                                            "type": "string"
+                                        },
+                                        "etat": {
+                                            "type": "string"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request"
+                    },
+                    "500": {
+                        "description": "Internal Server Error"
+                    }
+                }
+            }
+        },
+        "/api/v1/referentiel/{id}": {
+            "delete": {
+                "summary": "Soft delete a referentiel",
+                "description": "This endpoint is used to soft delete a referentiel.",
+                "operationId": "softDeleteReferentiel",
+                "tags": [
+                    "Referentiels"
+                ],
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Referentiel ID",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "id": {
+                                            "type": "string"
+                                        },
+                                        "libelle": {
+                                            "type": "string"
+                                        },
+                                        "etat": {
+                                            "type": "string"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request"
+                    },
+                    "500": {
+                        "description": "Internal Server Error"
+                    }
+                }
+            }
+        },
+        "/api/v1/referentiels/deleted": {
+            "get": {
+                "summary": "Get all deleted referentiels",
+                "description": "This endpoint is used to retrieve a list of deleted referentiels.",
+                "operationId": "getDeletedReferentiels",
+                "tags": [
+                    "Referentiels"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "type": "object",
+                                        "properties": {
+                                            "id": {
+                                                "type": "string"
+                                            },
+                                            "libelle": {
+                                                "type": "string"
+                                            },
+                                            "etat": {
+                                                "type": "string"
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error"
+                    }
+                }
+            }
+        },
+        "/api/v1/promotion": {
+            "post": {
+                "summary": "Create a new promotion",
+                "description": "This endpoint is used to create a new promotion.",
+                "operationId": "createPromotion",
+                "tags": [
+                    "Promotions"
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "libelle": {
+                                        "type": "string"
+                                    },
+                                    "date_debut": {
+                                        "type": "string",
+                                        "format": "date"
+                                    },
+                                    "date_fin": {
+                                        "type": "string",
+                                        "format": "date"
+                                    },
+                                    "referentiels": {
+                                        "type": "array",
+                                        "items": {
+                                            "type": "string"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successful response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "id": {
+                                            "type": "string"
+                                        },
+                                        "libelle": {
+                                            "type": "string"
+                                        },
+                                        "date_debut": {
+                                            "type": "string",
+                                            "format": "date"
+                                        },
+                                        "date_fin": {
+                                            "type": "string",
+                                            "format": "date"
+                                        },
+                                        "referentiels": {
+                                            "type": "array",
+                                            "items": {
+                                                "type": "string"
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error"
+                    }
+                }
+            }
+        },
+        "/api/v1/promotions": {
+            "get": {
+                "summary": "Get all promotions",
+                "description": "This endpoint is used to retrieve a list of all promotions.",
+                "operationId": "getAllPromotions",
+                "tags": [
+                    "Promotions"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "type": "object",
+                                        "properties": {
+                                            "id": {
+                                                "type": "string"
+                                            },
+                                            "libelle": {
+                                                "type": "string"
+                                            },
+                                            "date_debut": {
+                                                "type": "string",
+                                                "format": "date"
+                                            },
+                                            "date_fin": {
+                                                "type": "string",
+                                                "format": "date"
+                                            },
+                                            "referentiels": {
+                                                "type": "array",
+                                                "items": {
+                                                    "type": "string"
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error"
+                    }
+                }
+            }
+        },
+        "/api/v1/promotions/{id}": {
+            "patch": {
+                "summary": "Update a promotion",
+                "description": "This endpoint is used to update a promotion's information.",
+                "operationId": "updatePromotion",
+                "tags": [
+                    "Promotions"
+                ],
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Promotion ID",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "libelle": {
+                                        "type": "string"
+                                    },
+                                    "date_debut": {
+                                        "type": "string",
+                                        "format": "date"
+                                    },
+                                    "date_fin": {
+                                        "type": "string",
+                                        "format": "date"
+                                    },
+                                    "referentiels": {
+                                        "type": "array",
+                                        "items": {
+                                            "type": "string"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successful response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "id": {
+                                            "type": "string"
+                                        },
+                                        "libelle": {
+                                            "type": "string"
+                                        },
+                                        "date_debut": {
+                                            "type": "string",
+                                            "format": "date"
+                                        },
+                                        "date_fin": {
+                                            "type": "string",
+                                            "format": "date"
+                                        },
+                                        "referentiels": {
+                                            "type": "array",
+                                            "items": {
+                                                "type": "string"
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request"
+                    },
+                    "500": {
+                        "description": "Internal Server Error"
+                    }
+                }
+            }
+        },
+        "/api/v1/promotions/{id}/referentiels": {
+            "patch": {
+                "summary": "Update referentiels of a promotion",
+                "description": "This endpoint is used to update the referentiels of a promotion.",
+                "operationId": "updatePromotionReferentiels",
+                "tags": [
+                    "Promotions"
+                ],
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Promotion ID",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "referentiels": {
+                                        "type": "array",
+                                        "items": {
+                                            "type": "string"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successful response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "id": {
+                                            "type": "string"
+                                        },
+                                        "libelle": {
+                                            "type": "string"
+                                        },
+                                        "date_debut": {
+                                            "type": "string",
+                                            "format": "date"
+                                        },
+                                        "date_fin": {
+                                            "type": "string",
+                                            "format": "date"
+                                        },
+                                        "referentiels": {
+                                            "type": "array",
+                                            "items": {
+                                                "type": "string"
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request"
+                    },
+                    "500": {
+                        "description": "Internal Server Error"
+                    }
+                }
+            }
+        },
+        "/api/v1/promotions/current": {
+            "get": {
+                "summary": "Get the current promotion",
+                "description": "This endpoint is used to retrieve the current promotion.",
+                "operationId": "getCurrentPromotion",
+                "tags": [
+                    "Promotions"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "id": {
+                                            "type": "string"
+                                        },
+                                        "libelle": {
+                                            "type": "string"
+                                        },
+                                        "date_debut": {
+                                            "type": "string",
+                                            "format": "date"
+                                        },
+                                        "date_fin": {
+                                            "type": "string",
+                                            "format": "date"
+                                        },
+                                        "referentiels": {
+                                            "type": "array",
+                                            "items": {
+                                                "type": "string"
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error"
+                    }
+                }
+            }
+        },
+        "/api/v1/apprenants": {
+            "post": {
+                "summary": "Create a new apprenant",
+                "description": "This endpoint is used to create a new apprenant and associate them with a referentiel and promotion.",
+                "operationId": "createApprenant",
+                "tags": [
+                    "Apprenants"
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+
+                                    "nom": {
+                                        "type": "string"
+                                    }, 
+                                    "adresse": {
+                                        "type": "string"
+                                    },
+
+                                    "prenom": {
+                                        "type": "string"
+                                    },
+                                    "telephone": {
+                                        "type": "string"
+                                    },
+                                    "photo": {
+                                        "type": "string",
+                                        "format": "binary"
+                                    },
+                                    "referentiel_id": {
+                                        "type": "string"
+                                    },
+                                    "tuteur_nom": {
+                                        "type": "string"
+                                    },
+                                    "tuteur_prenom": {
+                                        "type": "string"
+                                    },
+                                    "tuteur_contact": {
+                                        "type": "string"
+                                    },
+                                    "cni": {
+                                        "type": "string",
+                                        "format": "binary"
+                                    },
+                                    "diplome": {
+                                        "type": "string",
+                                        "format": "binary"
+                                    },
+                                    "extrait_naissance": {
+                                        "type": "string",
+                                        "format": "binary"
+                                    },
+                                    "visite_medicale": {
+                                        "type": "string",
+                                        "format": "binary"
+                                    },
+                                    "casier_judiciaire": {
+                                        "type": "string",
+                                        "format": "binary"
+                                    },
+                                    "statut": {
+                                        "type": "string"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successful response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "id": {
+                                            "type": "string"
+                                        },
+                                        "nom": {
+                                            "type": "string"
+                                        },
+                                        "prenom": {
+                                            "type": "string"
+                                        },
+                                        "contact": {
+                                            "type": "string"
+                                        },
+                                        "photo": {
+                                            "type": "string"
+                                        },
+                                        "referentiel_id": {
+                                            "type": "string"
+                                        },
+                                        "tuteur_nom": {
+                                            "type": "string"
+                                        },
+                                        "tuteur_prenom": {
+                                            "type": "string"
+                                        },
+                                        "tuteur_contact": {
+                                            "type": "string"
+                                        },
+                                        "cni": {
+                                            "type": "string"
+                                        },
+                                        "diplome": {
+                                            "type": "string"
+                                        },
+                                        "extrait_naissance": {
+                                            "type": "string"
+                                        },
+                                        "visite_medicale": {
+                                            "type": "string"
+                                        },
+                                        "casier_judiciaire": {
+                                            "type": "string"
+                                        },
+                                        "statut": {
+                                            "type": "string"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request"
+                    },
+                    "500": {
+                        "description": "Internal Server Error"
+                    }
+                }
+            }
         }
-    }
+  }
 }

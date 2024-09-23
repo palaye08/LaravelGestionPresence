@@ -92,11 +92,11 @@ return [
             // 'encrypt' => env('DB_ENCRYPT', 'yes'),
             // 'trust_server_certificate' => env('DB_TRUST_SERVER_CERTIFICATE', 'false'),
         ],
-        'firebase' => [
-            'driver' => 'firebase',
-            'service_account_path' => env('FIREBASE_CONFIG_PATH'),
-            'database_uri' => env('FIREBASE_DATABASE_URL'),
-        ],
+        // 'firebase' => [
+        //     'driver' => 'firebase',
+        //     'service_account_path' => env('FIREBASE_CONFIG_PATH'),
+        //     'database_uri' => env('FIREBASE_DATABASE_URL'),
+        // ],
 
     ],
 

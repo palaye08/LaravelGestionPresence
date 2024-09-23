@@ -6,7 +6,6 @@ namespace App\Providers;
 
 use App\Models\User;
 use App\Models\Client;
-
 use App\Models\Article;
 use App\Policies\UserPolicy;
 use App\Policies\PromoPolicy;
@@ -33,5 +32,11 @@ class AuthServiceProvider extends ServiceProvider
     public function boot()
     {
         $this->registerPolicies();
+
+        //  Passport::routes();
     }
+
+
+
+
 }

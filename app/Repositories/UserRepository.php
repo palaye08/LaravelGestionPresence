@@ -28,10 +28,10 @@ class UserRepository implements UserRepositoryInterface
         return $this->model->all();
     }
 
-    public function update($id, array $data)
-    {
-        return $this->model->update($id, $data);
-    }
+        public function update($id, array $data)
+        {
+            return $this->model->update($id, $data);
+        }
 
     public function delete($id)
     {
@@ -59,4 +59,18 @@ class UserRepository implements UserRepositoryInterface
         }
         return null;
     }
+    public function findByRole($role)
+    {
+        $users = $this->model->all();
+        $filteredUsers = [];
+
+        foreach ($users as $id => $user) {
+            if ($user['role'] === $role) {
+                $filteredUsers[] = $user;
+            }
+        }
+
+        return $filteredUsers;
+    }
+
 }

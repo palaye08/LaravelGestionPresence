@@ -1,39 +1,29 @@
 <?php
+
 namespace App\Http\Controllers;
 
+use App\Services\AuthService;
 use Illuminate\Http\Request;
-use App\Services\AuthentificationPassport;
 
 class AuthController extends Controller
 {
-    protected AuthentificationPassport $authService;
+    private $authService;
 
-    public function __construct(AuthentificationPassport $authService)
+    public function __construct(AuthService $authService)
     {
         $this->authService = $authService;
     }
 
     public function login(Request $request)
     {
-        $validatedData = $request->validate([
-            'email' => 'required|email',
-            'password' => 'required',
-        ]);
+        // dd($request);
+        $credentials = $request->only('email', 'password');
+        $result = $this->authService->authenticate($credentials);
 
-        $user = $this->authService->authenticate($request->only('email', 'password'));
-            // dd($user);
-        if ($user) {
-            $token = $this->authService->generateToken($user);
-    
-            return response()->json([
-             
-                'token' => $token,
-            ], 200);
-        } 
+        if ($result) {
+            return response()->json($result, 200);
+        }
 
-        return response()->json([
-            'error' => 'Unauthorized',
-            'message' => 'Les informations d\'identification ne correspondent pas.',
-        ], 401);
+        return response()->json(['error' => 'Unauthorized'], 401);
     }
 }

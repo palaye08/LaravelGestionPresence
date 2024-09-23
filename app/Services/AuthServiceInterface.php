@@ -1,8 +1,8 @@
 <?php
+
 namespace App\Services;
 
-interface AuthServiceInterface{
-    
+interface AuthServiceInterface
+{
     public function authenticate($credentials);
-    public function logout();
 }

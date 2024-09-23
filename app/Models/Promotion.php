@@ -2,10 +2,15 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
 
-class Promotion extends Model
+
+class Promotion extends FirebaseBaseModel 
 {
-    use HasFactory;
+    
+    protected $fillable = ['photo','libelle', 'date_debut', 'date_fin','duree','etat', 'referentiels'];
+
+    public function getTable(){
+
+        return 'promotions';
+    }
 }
