@@ -12,11 +12,18 @@ RUN apt-get update && apt-get install -y \
     vim \
     unzip \
     git \
-    curl
+    curl \
+    libonig-dev \
+    libxml2-dev \
+    libzip-dev
+
+# Configuration des locales
+RUN echo "en_US.UTF-8 UTF-8" > /etc/locale.gen && \
+    locale-gen
 
 # Installation des extensions PHP requises
 RUN docker-php-ext-configure gd --with-freetype --with-jpeg && \
-    docker-php-ext-install pdo_mysql gd
+    docker-php-ext-install pdo_mysql gd mbstring zip xml
 
 # Installation de Composer
 COPY --from=composer:2.3 /usr/bin/composer /usr/bin/composer
@@ -27,13 +34,13 @@ WORKDIR /var/www
 # Copier les fichiers du projet dans le conteneur
 COPY . /var/www
 
-# Installation des dépendances PHP
+# Installation des dépendances PHP avec Composer
 RUN composer install --no-dev --optimize-autoloader
 
-# Ajuster les permissions des fichiers
+# Ajuster les permissions des fichiers (spécifique à Laravel)
 RUN chown -R www-data:www-data /var/www \
-    && chmod -R 755 /var/www/storage \
-    && chmod -R 755 /var/www/bootstrap/cache
+    && chmod -R 775 /var/www/storage \
+    && chmod -R 775 /var/www/bootstrap/cache
 
 # Exposer le port pour PHP-FPM
 EXPOSE 9000
