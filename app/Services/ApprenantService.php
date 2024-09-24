@@ -69,7 +69,7 @@ class ApprenantService
         $apprenantData = [
             'nom' => $data['nom'],
             'prenom' => $data['prenom'],
-            'telephone' => $data['contact'],
+            'telephone' => $data['telephone'],
             'photo' => $data['photo'] ?? null,
             'referentiel_id' => $data['referentiel_id'],
             'matricule' => $matricule,
