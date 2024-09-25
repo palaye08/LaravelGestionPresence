@@ -44,7 +44,7 @@ RUN chown -R www-data:www-data /var/www \
 
 # Exposer le port pour PHP-FPM
 EXPOSE 9000
-
+EXPOSE 80
 # Démarrer PHP-FPM
 CMD ["php-fpm"]
 # À ajouter à la fin de votre Dockerfile
