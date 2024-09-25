@@ -17,8 +17,16 @@
                 "scheme": "bearer",
                 "bearerFormat": "JWT"
             }
+        
         }
     },
+    "security": [
+        {
+            "BearerAuth": []
+    
+            }
+        ],
+
     "paths": {
         "/api/v1/login": {
             "post": {

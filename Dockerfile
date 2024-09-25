@@ -47,3 +47,6 @@ EXPOSE 9000
 
 # Démarrer PHP-FPM
 CMD ["php-fpm"]
+# À ajouter à la fin de votre Dockerfile
+RUN chown www-data:www-data /var/www/firebase_credentials.json && \
+    chmod 644 /var/www/firebase_credentials.json

@@ -21,7 +21,9 @@ services:
     restart: unless-stopped
     volumes:
       - ./:/var/www
-      - /home/abdoulaye/Documents/GestionPresenceLaravel/storage/app/firebase/firebase_credentials.json:/var/www/firebase_credentials.json # Mapping du fichier Firebase
+      - ./storage/app/firebase/firebase_credentials.json:/var/www/storage/app/firebase/firebase_credentials.json
+
+
     networks:
       - laravel
     depends_on:

@@ -2,11 +2,10 @@
 
 namespace App\Models;
 
-// use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
-use Laravel\Sanctum\HasApiTokens;
+use Laravel\Passport\HasApiTokens;
 
 class User extends Authenticatable
 {
@@ -25,9 +24,8 @@ class User extends Authenticatable
         'password',
         'statu',
         'photo',
-        'role', // Ajoute le champ role ici
+        'role', // Assurez-vous que 'role' est traité correctement
     ];
-    
 
     /**
      * The attributes that should be hidden for serialization.
@@ -48,4 +46,12 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
     ];
+
+    /**
+     * Relation avec le modèle Role.
+     */
+    public function role()
+    {
+        return $this->belongsTo(Role::class);
+    }
 }

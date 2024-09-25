@@ -115,6 +115,7 @@ return [
     */
 
     'password_timeout' => 10800,
-    'login_type' => env('LOGIN_TYPE'),
+    'login_type' => env('LOGIN_TYPE', 'mysql'), // Utilisez 'mysql' comme valeur par défaut
+
 
 ];

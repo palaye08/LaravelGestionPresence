@@ -24,7 +24,6 @@ use App\Http\Controllers\ReferentielController;
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
-//->middleware('auth:api')
 Route::post('/logout', [AuthController::class, 'logout']);
 
 
@@ -34,13 +33,13 @@ Route::prefix('/v1')->group(function () {
 Route::post('/login', [AuthController::class, 'login']);
 
     // users 
- Route::prefix('/')->group(function () {  
+ Route::prefix('/')->middleware('auth:api')->group(function () {  
 Route::post('/user', [UserController::class, 'store']);
 Route::get('/users', [UserController::class, 'index']);
 Route::patch('/users/{id}', [UserController::class, 'update']);
     
 });
-Route::prefix('/')->group(function () {  
+Route::prefix('/')->middleware('auth:api')->group(function () {  
 // referentiels
 Route::get('/referentiels', [ReferentielController::class, 'getActiveReferentiels']);
 Route::post('/referentiel', [ReferentielController::class, 'createReferentiel']);
@@ -53,19 +52,19 @@ Route::get('/referentiels/deleted', [ReferentielController::class, 'getDeletedRe
 });
 
 // Promotions
-Route::prefix('/promotions')->group(function () { 
+Route::prefix('/')->middleware('auth:api')->group(function () { 
     Route::group(['middleware' => 'promotion.closed'], function () {  
- Route::post('/', [PromotionController::class, 'createPromotion']);
- Route::patch('/{id}', [PromotionController::class, 'updatePromotion']);
- Route::patch('/{id}/referentiels', [PromotionController::class, 'updatePromotionReferentiels']);
+ Route::post('/promotion', [PromotionController::class, 'createPromotion']);
+ Route::patch('promotions/{id}', [PromotionController::class, 'updatePromotion']);
+ Route::patch('promotions/{id}/referentiels', [PromotionController::class, 'updatePromotionReferentiels']);
 
  });
- Route::get('/', [PromotionController::class, 'getAllPromotions']);
- Route::get('/current', [PromotionController::class, 'getCurrentPromotion']);
- Route::get('/{id}/referentiels', [PromotionController::class, 'getActiveReferentiels']);
+ Route::get('/promotions', [PromotionController::class, 'getAllPromotions']);
+ Route::get('/promotions/current', [PromotionController::class, 'getCurrentPromotion']);
+ Route::get('/promotions/{id}/referentiels', [PromotionController::class, 'getActiveReferentiels']);
 }); 
 //   appreants
-Route::prefix('/')->group(function () { 
+Route::prefix('/')->middleware('auth:api')->group(function () { 
  Route::post('/apprenants', [ApprenantController::class, 'createApprenant']);
 }); 
 
