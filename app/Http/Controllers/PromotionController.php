@@ -4,14 +4,17 @@ namespace App\Http\Controllers;
 
 use App\Services\PromotionService;
 use Illuminate\Http\Request;
+use App\Services\ReferentielService;
 
 class PromotionController extends Controller
 {
     protected $promotionService;
 
-    public function __construct(PromotionService $promotionService)
+    public function __construct(PromotionService $promotionService ,ReferentielService $refentielService )
     {
         $this->promotionService = $promotionService;
+        $this->refentielService = $refentielService;
+
     }
 
     public function createPromotion(Request $request)
@@ -63,7 +66,7 @@ class PromotionController extends Controller
     public function getActiveReferentiels($id)
     {
         try {
-            $referentiels = $this->promotionService->getActiveReferentiels($id);
+            $referentiels = $this->refentielService->getActiveReferentiels($id);
             return response()->json($referentiels);
         } catch (\Exception $e) {
             return response()->json(['error' => $e->getMessage()], 404);

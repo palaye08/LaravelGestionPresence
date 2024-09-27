@@ -12,6 +12,7 @@ interface ReferentielRepositoryInterface{
     public function restoreReferentiel($id);
     public function getActiveReferentiels();
     public function getReferentielsByEtat($etat);
-    
+    public function getDeletedReferentiels();
+    public function save($referentiel); 
 
 }

@@ -52,13 +52,20 @@ class ReferentielController extends Controller
             return response()->json(['error' => $e->getMessage()], 404);
         }
     }
-    public function updateReferentiel(Request $request, $id)
+    public function updateReferentiel(Request $request)
     {
         try {
+            $id = $request->route('id'); // Récupère l'ID depuis la route
             $data = $request->all();
+            
+            // Log pour le débogage
+            \Log::info('Données reçues pour la mise à jour', ['id' => $id, 'data' => $data]);
+
             $referentiel = $this->serviceReferentiel->updateReferentiel($id, $data);
+            
             return response()->json($referentiel);
         } catch (\Exception $e) {
+            \Log::error('Erreur lors de la mise à jour du référentiel', ['id' => $id, 'error' => $e->getMessage()]);
             return response()->json(['error' => $e->getMessage()], 404);
         }
     }

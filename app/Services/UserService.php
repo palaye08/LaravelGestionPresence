@@ -16,7 +16,7 @@ class UserService
     {
         $this->repository = $repository;
         
-        // Initialiser Firebase Storage
+        
         $firebaseCredentialsPath = storage_path('app/firebase/firebase_credentials.json');
         
         if (!file_exists($firebaseCredentialsPath)) {
@@ -27,37 +27,32 @@ class UserService
         $this->storage = $factory->createStorage();
     }
 
-    // Le reste du code reste inchangé...
 
     public function store(array $data)
     {
         $this->validate($data);
         
-        // Hash du mot de passe (optionnel si tu l'utilises pour d'autres logiques)
          $data['password'] = bcrypt($data['password']);
     
-        // Traiter et uploader la photo si elle existe
         if (isset($data['photo']) && $data['photo'] instanceof \Illuminate\Http\UploadedFile) {
             $photoUrl = $this->uploadPhotoToFirebase($data['photo'], $data['email']);
             $data['photo_url'] = $photoUrl;
         }
     
-        // Supprimer l'objet UploadedFile de $data avant de créer l'utilisateur
         unset($data['photo']);
     
-        // Créer l'utilisateur dans Firebase Authentication
         $firebaseAuth = (new Factory)->withServiceAccount(storage_path('app/firebase/firebase_credentials.json'))->createAuth();
     
         try {
             $firebaseUser = $firebaseAuth->createUser([
                 'email' => $data['email'],
-                'password' => $data['password'], // Mot de passe brut pour Firebase
+                'password' => $data['password'], 
                 'displayName' => $data['nom'] . ' ' . $data['prenom'],
                 'emailVerified' => false,
                 'disabled' => false,
                 'photoURL' => $data['photo_url'] ?? null,
                 'customClaims' => [
-                    'role' => $data['role'], // Optionnel : ajouter des claims personnalisés
+                    'role' => $data['role'],
                 ],
             ]);
     

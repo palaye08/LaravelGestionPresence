@@ -59,13 +59,20 @@ Route::prefix('/')->middleware('auth:api')->group(function () {
  Route::patch('promotions/{id}/referentiels', [PromotionController::class, 'updatePromotionReferentiels']);
 
  });
+ Route::get('/promotions/{id}/close', [PromotionController::class, 'closePromotion']);
+ Route::get('/promotions/{id}/referentiel', [PromotionController::class, 'getActiveReferentiels']);
  Route::get('/promotions', [PromotionController::class, 'getAllPromotions']);
  Route::get('/promotions/current', [PromotionController::class, 'getCurrentPromotion']);
- Route::get('/promotions/{id}/referentiels', [PromotionController::class, 'getActiveReferentiels']);
 }); 
 //   appreants
 Route::prefix('/')->middleware('auth:api')->group(function () { 
+    
  Route::post('/apprenants', [ApprenantController::class, 'createApprenant']);
+ Route::get('/apprenant/{id}', [ApprenantController::class, 'show']);
+ Route::get('/apprenants', [ApprenantController::class, 'listApprenants']);
+ Route::post('/apprenants/import', [ApprenantController::class, 'importApprenants']);
+
+
 }); 
 
  }); 

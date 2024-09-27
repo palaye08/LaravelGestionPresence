@@ -153,14 +153,16 @@ class PromotionService implements PromotionServiceInterface
     }
     public function getCurrentPromotion()
     {
-        $currentDate = Carbon::now();
+        
         $promotions = $this->promotionRepository->getAllPromotions();
+        
 
         foreach ($promotions as $promotion) {
-            $date_debut = Carbon::createFromFormat('d/m/Y', $promotion->date_debut);
-            $date_fin = Carbon::createFromFormat('d/m/Y', $promotion->date_fin);
+          
+            // $date_debut = Carbon::createFromFormat('d/m/Y', $promotion->date_debut);
+            // $date_fin = Carbon::createFromFormat('d/m/Y', $promotion->date_fin);
 
-            if ($currentDate->between($date_debut, $date_fin)) {
+            if ($promotion['etat'] =='actif') {
                 return $promotion;
             }
         }

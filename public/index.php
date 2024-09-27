@@ -48,7 +48,7 @@ $app = require_once __DIR__.'/../bootstrap/app.php';
 
 $kernel = $app->make(Kernel::class);
 
-// Ajout pour forcer l'écoute sur le port défini
+//  Ajout pour forcer l'écoute sur le port défini
 $port = env('PORT', 8080);
 $app->bind('Illuminate\Http\Request', function () use ($port) {
     return Request::capture()->server->set('SERVER_PORT', $port);
@@ -60,7 +60,7 @@ $response = $kernel->handle(
 
 $kernel->terminate($request, $response);
 
-// Démarrer le serveur intégré de PHP sur le port spécifié
+ // Démarrer le serveur intégré de PHP sur le port spécifié
 if (php_sapi_name() === 'cli-server') {
     $app->run();
 } else {

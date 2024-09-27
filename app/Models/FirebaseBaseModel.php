@@ -37,9 +37,22 @@ abstract class FirebaseBaseModel
 
     public function find($id)
     {
-                
-        return $this->database->getReference($this->tableName)->getChild($id)->getValue();
+        $referentiel = $this->database->getReference($this->tableName)->getChild($id)->getValue();
+        
+       
+        if (!$referentiel) {
+            return null;
+        }
+    
+        return $referentiel;
     }
+    
+    public function updateReferentiel($id, $data)
+    {
+        $this->database->getReference($this->tableName)->getChild($id)->set($data);
+    }
+    
+
 
     public function all()
     {    
@@ -48,10 +61,10 @@ abstract class FirebaseBaseModel
     }
 
     public function update($id, array $data)
-    {
+    { 
         $this->database->getReference($this->tableName)->getChild($id)->update($data);
         return $this->find($id);
-    }
+    }   
 
     public function delete($id)
     {
@@ -64,7 +77,9 @@ abstract class FirebaseBaseModel
     }
     public function softDelete($id)
     {
-        $this->database->getReference($this->tableName)->getChild($id)->update(['statut' => 'inactif']);
+        $this->database->getReference($this->tableName)->getChild($id)->update(['etat' => 'inactif']);
+        
         return $this->find($id);
     }
+    
 }

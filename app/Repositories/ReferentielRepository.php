@@ -42,15 +42,16 @@ class ReferentielRepository implements ReferentielRepositoryInterface
     }
 
     public function updateReferentiel($id, $data)
-    {
+    {  
+        // dd($id, $data);
         return $this->model->update($id, $data);
     }
-
-    public function softDeleteReferentiel($id)
+    public function save($referentiel)
     {
-        return $this->model->softDelete($id);
+        $this->model->update($referentiel['id'], $referentiel);
     }
-
+    
+    
     public function restoreReferentiel($id)
     {
         return $this->model->withTrashed()->find($id)->restore();
@@ -61,11 +62,25 @@ class ReferentielRepository implements ReferentielRepositoryInterface
         return $this->model->where('etat', $etat)->get();
     }
 
-    // ReferentielRepository.php
+    public function softDeleteReferentiel($id)
+    {
+        return $this->model->softDelete($id);
+    }
+
     public function getDeletedReferentiels()
     {
-        return $this->model->where('etat', 'inactif')->get();
+        // Récupérer tous les référentiels et filtrer ceux qui sont inactifs
+        $referentiels = $this->model->all();
+        
+        if ($referentiels) {
+            return array_filter($referentiels, function($referentiel) {
+                return isset($referentiel['etat']) && $referentiel['etat'] === 'inactif';
+            });
+        }
+
+        return []; // Retourne un tableau vide si aucun référentiel n'est trouvé
     }
+    
 
 
 

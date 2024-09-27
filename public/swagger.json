@@ -1068,7 +1068,54 @@
                 }
             }
         },
-        "/api/v1/apprenants": {
+        "/api/v1/promotions/{id}/close": {
+    "get": {
+        "summary": "Close a promotion",
+        "description": "This endpoint is used to close a specific promotion by its ID.",
+        "operationId": "closePromotion",
+        "tags": [
+            "Promotions"
+        ],
+        "parameters": [
+            {
+                "name": "id",
+                "in": "path",
+                "required": true,
+                "schema": {
+                    "type": "string"
+                },
+                "description": "The ID of the promotion to close."
+            }
+        ],
+        "responses": {
+            "200": {
+                "description": "Promotion closed successfully",
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "message": {
+                                    "type": "string",
+                                    "example": "Promotion closed successfully."
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "404": {
+                "description": "Promotion not found"
+            },
+            "500": {
+                "description": "Internal Server Error"
+            }
+        }
+    }
+},
+
+        
+        "/api/v1/apprenant": {
             "post": {
                 "summary": "Create a new apprenant",
                 "description": "This endpoint is used to create a new apprenant and associate them with a referentiel and promotion.",
@@ -1207,6 +1254,146 @@
                     }
                 }
             }
+        },"/api/v1/apprenants/{id}": {
+    "get": {
+        "summary": "Retrieve an apprenant by ID",
+        "description": "This endpoint retrieves an apprenant's details by their ID.",
+        "operationId": "getApprenantById",
+        "tags": [
+            "Apprenants"
+        ],
+        "parameters": [
+            {
+                "name": "id",
+                "in": "path",
+                "required": true,
+                "schema": {
+                    "type": "string"
+                },
+                "description": "The ID of the apprenant to retrieve."
+            }
+        ],
+        "responses": {
+            "200": {
+                "description": "Successful response",
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "id": { "type": "string" },
+                                "nom": { "type": "string" },
+                                "prenom": { "type": "string" },
+                                "adresse": { "type": "string" },
+                                "telephone": { "type": "string" },
+                                "referentiel_id": { "type": "string" },
+                                "tuteur_nom": { "type": "string" },
+                                "tuteur_prenom": { "type": "string" },
+                                "tuteur_contact": { "type": "string" },
+                                "photo": { "type": "string" },
+                                "statut": { "type": "string" }
+                            }
+                        }
+                    }
+                }
+            },
+            "404": {
+                "description": "Apprenant not found"
+            },
+            "500": {
+                "description": "Internal Server Error"
+            }
         }
+    }
+},
+
+"/api/v1/apprenants": {
+    "get": {
+        "summary": "List all apprenants",
+        "description": "This endpoint returns a list of all apprenants in the system.",
+        "operationId": "listApprenants",
+        "tags": [
+            "Apprenants"
+        ],
+        "responses": {
+            "200": {
+                "description": "Successful response",
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "type": "object",
+                                "properties": {
+                                    "id": { "type": "string" },
+                                    "nom": { "type": "string" },
+                                    "prenom": { "type": "string" },
+                                    "telephone": { "type": "string" },
+                                    "referentiel_id": { "type": "string" },
+                                    "photo": { "type": "string" },
+                                    "statut": { "type": "string" }
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "500": {
+                "description": "Internal Server Error"
+            }
+        }
+    }
+},
+
+"/api/v1/apprenants/import": {
+    "post": {
+        "summary": "Import multiple apprenants",
+        "description": "This endpoint allows importing multiple apprenants via file upload.",
+        "operationId": "importApprenants",
+        "tags": [
+            "Apprenants"
+        ],
+        "requestBody": {
+            "required": true,
+            "content": {
+                "multipart/form-data": {
+                    "schema": {
+                        "type": "object",
+                        "properties": {
+                            "file": {
+                                "type": "string",
+                                "format": "binary",
+                                "description": "The file containing apprenant data to import."
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "responses": {
+            "200": {
+                "description": "Successful import",
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "message": { "type": "string" },
+                                "importedCount": { "type": "integer" }
+                            }
+                        }
+                    }
+                }
+            },
+            "400": {
+                "description": "Bad Request"
+            },
+            "500": {
+                "description": "Internal Server Error"
+            }
+        }
+    }
+}
+
   }
 }

@@ -39,4 +39,5 @@ RUN chown -R www-data:www-data /var/www/html \
 EXPOSE $PORT
 EXPOSE 9000
 # Commande pour démarrer l'application
-CMD php artisan serve --host=0.0.0.0 --port=$PORT
+# CMD php artisan serve --host=0.0.0.0 --port=$PORT
+CMD ["php-fpm"]

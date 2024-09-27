@@ -23,7 +23,7 @@ class UserServiceMysql
             'prenom' => 'required|string|max:255',
             'adresse' => 'required|string|max:255',
             'telephone' => 'required|string',
-            'role' => 'required|in:Admin,Coach,CM,Manager',
+            'role' => 'required|in:Admin,Coach,CM,Manager,Apprenant',
             'email' => 'required|email',
             'password' => 'required',
             'photo' => 'nullable|file|image|max:5120', // 5MB max

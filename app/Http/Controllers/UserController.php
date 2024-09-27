@@ -28,11 +28,10 @@ class UserController extends Controller
             // Créer l'utilisateur dans Firebase
 
             $data['password'] = bcrypt($data['password']); 
-            // dd($data);
+            
             $mysqlUser = $this->serviceMysql->store($data);
             
             
-            // Ajouter l'utilisateur dans MySQL
             $firebaseUser = $this->service->store($data);
            
 
