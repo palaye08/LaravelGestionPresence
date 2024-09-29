@@ -32,12 +32,19 @@ RUN composer install --no-dev --optimize-autoloader
 
 # Ajuster les permissions des fichiers
 RUN chown -R www-data:www-data /var/www/html \
-    && chmod -R 755 /var/www/html/storage \
-    && chmod -R 755 /var/www/html/bootstrap/cache
+    && find /var/www/html/storage -type d -exec chmod 775 {} \; \
+    && find /var/www/html/storage -type f -exec chmod 664 {} \; \
+    && find /var/www/html/bootstrap/cache -type d -exec chmod 775 {} \; \
+    && find /var/www/html/bootstrap/cache -type f -exec chmod 664 {} \;
 
-# Exposer le port défini dans la variable d'environnement PORT
-EXPOSE $PORT
+# Créer le fichier de log s'il n'existe pas et ajuster ses permissions
+RUN mkdir -p /var/www/html/storage/logs \
+    && touch /var/www/html/storage/logs/laravel.log \
+    && chown -R www-data:www-data /var/www/html/storage \
+    && chmod -R 775 /var/www/html/storage
+
+# Exposer le port 9000 pour PHP-FPM
 EXPOSE 9000
+
 # Commande pour démarrer l'application
-# CMD php artisan serve --host=0.0.0.0 --port=$PORT
 CMD ["php-fpm"]
