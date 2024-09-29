@@ -30,21 +30,30 @@ COPY . .
 # Installation des dépendances PHP avec Composer
 RUN composer install --no-dev --optimize-autoloader
 
-# Ajuster les permissions des fichiers
-RUN chown -R www-data:www-data /var/www/html \
-    && find /var/www/html/storage -type d -exec chmod 775 {} \; \
-    && find /var/www/html/storage -type f -exec chmod 664 {} \; \
-    && find /var/www/html/bootstrap/cache -type d -exec chmod 775 {} \; \
-    && find /var/www/html/bootstrap/cache -type f -exec chmod 664 {} \;
+# Créer les répertoires nécessaires et ajuster les permissions
+RUN mkdir -p storage/logs \
+    && mkdir -p storage/framework/sessions \
+    && mkdir -p storage/framework/views \
+    && mkdir -p storage/framework/cache \
+    && mkdir -p bootstrap/cache \
+    && chown -R www-data:www-data /var/www/html \
+    && chmod -R 775 /var/www/html/storage \
+    && chmod -R 775 /var/www/html/bootstrap/cache
 
-# Créer le fichier de log s'il n'existe pas et ajuster ses permissions
-RUN mkdir -p /var/www/html/storage/logs \
-    && touch /var/www/html/storage/logs/laravel.log \
-    && chown -R www-data:www-data /var/www/html/storage \
-    && chmod -R 775 /var/www/html/storage
+# Créer le fichier de log et ajuster ses permissions
+RUN touch storage/logs/laravel.log \
+    && chown www-data:www-data storage/logs/laravel.log \
+    && chmod 664 storage/logs/laravel.log
 
-# Exposer le port 8080
-EXPOSE 8080
+# Copier le fichier .env et générer la clé
+COPY .env.example .env
+RUN php artisan key:generate
+
+# Exposer le port 9000
+EXPOSE $PORT
+
+# Définir l'utilisateur par défaut pour les commandes suivantes
+USER www-data
 
 # Commande pour démarrer l'application
 CMD php artisan serve --host=0.0.0.0 --port=$PORT
