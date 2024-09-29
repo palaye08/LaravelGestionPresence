@@ -43,8 +43,8 @@ RUN mkdir -p /var/www/html/storage/logs \
     && chown -R www-data:www-data /var/www/html/storage \
     && chmod -R 775 /var/www/html/storage
 
-# Exposer le port 9000 pour PHP-FPM
-EXPOSE 9000
+# Exposer le port 8080
+EXPOSE 8080
 
 # Commande pour démarrer l'application
-CMD ["php-fpm"]
+CMD php artisan serve --host=0.0.0.0 --port=$PORT
