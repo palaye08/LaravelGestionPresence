@@ -52,7 +52,7 @@ Route::get('/referentiels/deleted', [ReferentielController::class, 'getDeletedRe
 });
 
 // Promotions
-Route::prefix('/')->group(function () { 
+Route::prefix('/')->middleware('auth:api')->group(function () { 
     Route::group(['middleware' => 'promotion.closed'], function () {  
  Route::post('/promotion', [PromotionController::class, 'createPromotion']);
  Route::patch('promotions/{id}', [PromotionController::class, 'updatePromotion']);
