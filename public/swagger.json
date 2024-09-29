@@ -5,12 +5,8 @@
         "version": "1.0.0",
         "description": "Documentation of API endpoints for the application"
     },
-    "servers": [
-        {
-            "url": "http://localhost:8080",
-            "description": "Serveur Local"
-        }
-    ],"components": {
+  
+    "components": {
         "securitySchemes": {
             "BearerAuth": {
                 "type": "http",
