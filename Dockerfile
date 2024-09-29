@@ -49,7 +49,7 @@ RUN touch storage/logs/laravel.log \
 COPY .env.example .env
 RUN php artisan key:generate
 
-# Exposer le port 9000
+# Exposer le port 8080
 EXPOSE $PORT
 
 # Définir l'utilisateur par défaut pour les commandes suivantes
