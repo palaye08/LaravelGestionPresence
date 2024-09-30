@@ -5,8 +5,7 @@
         "version": "1.0.0",
         "description": "Documentation of API endpoints for the application"
     },
-  
-    "components": {
+   "components": {
         "securitySchemes": {
             "BearerAuth": {
                 "type": "http",
@@ -1389,7 +1388,366 @@
             }
         }
     }
-}
+}, "/api/v1//notes/modules/{id}": {
+    "post": {
+      "tags": ["Modules"],
+      "summary": "Ajouter une note de module à un groupe d'apprenants",
+      "description": "Ajoute une note de module à un groupe d'apprenants d'un référentiel de la promotion en cours",
+      "parameters": [
+        {
+          "name": "id",
+          "in": "path",
+          "required": true,
+          "schema": {
+            "type": "integer"
+          },
+          "description": "ID du module"
+        }
+      ],
+      "requestBody": {
+        "required": true,
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "notes": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "apprenantId": {
+                        "type": "integer"
+                      },
+                      "note": {
+                        "type": "number"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "responses": {
+        "200": {
+          "description": "Notes ajoutées avec succès",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "message": {
+                    "type": "string"
+                  },
+                  "data": {
+                    "type": "object"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "400": {
+          "description": "Données invalides"
+        },
+        "401": {
+          "description": "Non autorisé"
+        },
+        "500": {
+          "description": "Erreur serveur"
+        }
+      },
+      "security": [
+        {
+          "bearerAuth": []
+        }
+      ]
+    }
+  },
+  "/api/v1//notes/apprenants": {
+    "post": {
+      "tags": ["Modules"],
+      "summary": "Ajouter des notes de modules à un apprenant",
+      "description": "Ajoute des notes de modules à un apprenant spécifique",
+      "requestBody": {
+        "required": true,
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "apprenantId": {
+                  "type": "integer"
+                },
+                "notes": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "moduleId": {
+                        "type": "integer"
+                      },
+                      "note": {
+                        "type": "number"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "responses": {
+        "200": {
+          "description": "Notes ajoutées avec succès",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "message": {
+                    "type": "string"
+                  },
+                  "data": {
+                    "type": "array",
+                    "items": {
+                      "type": "object"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "400": {
+          "description": "Données invalides"
+        },
+        "401": {
+          "description": "Non autorisé"
+        },
+        "500": {
+          "description": "Erreur serveur"
+        }
+      },
+      "security": [
+        {
+          "bearerAuth": []
+        }
+      ]
+    }
+  },
+  "/api/v1//notes/apprenants/{id}": {
+    "patch": {
+      "tags": ["Modules"],
+      "summary": "Modifier les notes de modules d'un apprenant",
+      "description": "Modifie les notes de modules d'un apprenant spécifique",
+      "parameters": [
+        {
+          "name": "id",
+          "in": "path",
+          "required": true,
+          "schema": {
+            "type": "integer"
+          },
+          "description": "ID de l'apprenant"
+        }
+      ],
+      "requestBody": {
+        "required": true,
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "notes": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "noteId": {
+                        "type": "integer"
+                      },
+                      "note": {
+                        "type": "number"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "responses": {
+        "200": {
+          "description": "Notes mises à jour avec succès",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "message": {
+                    "type": "string"
+                  },
+                  "data": {
+                    "type": "array",
+                    "items": {
+                      "type": "object"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "400": {
+          "description": "Données invalides"
+        },
+        "401": {
+          "description": "Non autorisé"
+        },
+        "500": {
+          "description": "Erreur serveur"
+        }
+      },
+      "security": [
+        {
+          "bearerAuth": []
+        }
+      ]
+    }
+  },
+  "/api/v1//notes/referentiels/{id}": {
+    "get": {
+      "tags": ["Modules"],
+      "summary": "Lister les notes des apprenants du référentiel",
+      "description": "Liste les notes des apprenants du référentiel de la promotion en cours",
+      "parameters": [
+        {
+          "name": "id",
+          "in": "path",
+          "required": true,
+          "schema": {
+            "type": "integer"
+          },
+          "description": "ID du référentiel"
+        }
+      ],
+      "responses": {
+        "200": {
+          "description": "Liste des notes récupérée avec succès",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "data": {
+                    "type": "array",
+                    "items": {
+                      "type": "object"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "401": {
+          "description": "Non autorisé"
+        },
+        "500": {
+          "description": "Erreur serveur"
+        }
+      },
+      "security": [
+        {
+          "bearerAuth": []
+        }
+      ]
+    }
+  },
+  "/api/v1//notes/export/referentiels/{id}": {
+    "get": {
+      "tags": ["Modules"],
+      "summary": "Générer le relevé de notes des apprenants du référentiel",
+      "description": "Génère le relevé de notes des apprenants du référentiel de la promotion en cours",
+      "parameters": [
+        {
+          "name": "id",
+          "in": "path",
+          "required": true,
+          "schema": {
+            "type": "integer"
+          },
+          "description": "ID du référentiel"
+        }
+      ],
+      "responses": {
+        "200": {
+          "description": "Fichier Excel généré avec succès",
+          "content": {
+            "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet": {
+              "schema": {
+                "type": "string",
+                "format": "binary"
+              }
+            }
+          }
+        },
+        "401": {
+          "description": "Non autorisé"
+        },
+        "500": {
+          "description": "Erreur serveur"
+        }
+      },
+      "security": [
+        {
+          "bearerAuth": []
+        }
+      ]
+    }
+  },
+  "/api/v1//notes/export/apprenants/{id}": {
+    "get": {
+      "tags": ["Modules"],
+      "summary": "Générer le relevé de notes d'un apprenant",
+      "description": "Génère le relevé de notes d'un apprenant spécifique",
+      "parameters": [
+        {
+          "name": "id",
+          "in": "path",
+          "required": true,
+          "schema": {
+            "type": "integer"
+          },
+          "description": "ID de l'apprenant"
+        }
+      ],
+      "responses": {
+        "200": {
+          "description": "Fichier Excel généré avec succès",
+          "content": {
+            "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet": {
+              "schema": {
+                "type": "string",
+                "format": "binary"
+              }
+            }
+          }
+        },
+        "401": {
+          "description": "Non autorisé"
+        },
+        "500": {
+          "description": "Erreur serveur"
+        }
+      }
+    }
+  }
 
   }
 }

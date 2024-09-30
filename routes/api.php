@@ -4,6 +4,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\ModuleController;
 use App\Http\Controllers\ApprenantController;
 use App\Http\Controllers\PromotionController;
 use App\Http\Controllers\ReferentielController;
@@ -33,13 +34,13 @@ Route::prefix('/v1')->group(function () {
 Route::post('/login', [AuthController::class, 'login']);
 
     // users 
- Route::prefix('/')->middleware('auth:api')->group(function () {  
+ Route::prefix('/')->group(function () {  
 Route::post('/user', [UserController::class, 'store']);
 Route::get('/users', [UserController::class, 'index']);
 Route::patch('/users/{id}', [UserController::class, 'update']);
     
 });
-Route::prefix('/')->middleware('auth:api')->group(function () {  
+Route::prefix('/')->group(function () {  
 // referentiels
 Route::get('/referentiels', [ReferentielController::class, 'getActiveReferentiels']);
 Route::post('/referentiel', [ReferentielController::class, 'createReferentiel']);
@@ -52,7 +53,7 @@ Route::get('/referentiels/deleted', [ReferentielController::class, 'getDeletedRe
 });
 
 // Promotions
-Route::prefix('/')->middleware('auth:api')->group(function () { 
+Route::prefix('/')->group(function () { 
     Route::group(['middleware' => 'promotion.closed'], function () {  
  Route::post('/promotion', [PromotionController::class, 'createPromotion']);
  Route::patch('promotions/{id}', [PromotionController::class, 'updatePromotion']);
@@ -65,7 +66,7 @@ Route::prefix('/')->middleware('auth:api')->group(function () {
  Route::get('/promotions/current', [PromotionController::class, 'getCurrentPromotion']);
 }); 
 //   appreants
-Route::prefix('/')->middleware('auth:api')->group(function () { 
+Route::prefix('/')->group(function () { 
     
  Route::post('/apprenants', [ApprenantController::class, 'createApprenant']);
  Route::get('/apprenant/{id}', [ApprenantController::class, 'show']);
@@ -75,6 +76,15 @@ Route::prefix('/')->middleware('auth:api')->group(function () {
 
 }); 
 
+// Modules
+Route::prefix('/')->group(function () { 
+    Route::post('/notes/modules/{id}', [ModuleController::class, 'addNoteToGroup']);
+    Route::post('/notes/apprenants', [ModuleController::class, 'addNotesToApprenant']);
+    Route::patch('/notes/apprenants/{id}', [ModuleController::class, 'updateApprenantNotes']);
+    Route::get('/notes/referentiels/{id}', [ModuleController::class, 'getNotesForReferentiel']);
+    Route::get('/notes/export/referentiels/{id}', [ModuleController::class, 'exportReferentielNotes']);
+    Route::get('/notes/export/apprenants/{id}', [ModuleController::class, 'exportApprenantNotes']);
+ });
  }); 
 
 

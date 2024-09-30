@@ -50,10 +50,8 @@ COPY .env.example .env
 RUN php artisan key:generate
 
 # Exposer le port 8080
-EXPOSE $PORT
+EXPOSE 8080
 
-# Définir l'utilisateur par défaut pour les commandes suivantes
-USER www-data
 
 # Commande pour démarrer l'application
 CMD php artisan serve --host=0.0.0.0 --port=$PORT
