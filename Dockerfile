@@ -40,6 +40,9 @@ RUN mkdir -p storage/logs \
     && chmod -R 775 /var/www/html/storage \
     && chmod -R 775 /var/www/html/bootstrap/cache
 
+# Donner les permissions d'exécution aux fichiers PHP dans app/Providers
+RUN chmod -R 775 /var/www/html/app/Providers
+
 # Créer le fichier de log et ajuster ses permissions
 RUN touch storage/logs/laravel.log \
     && chown www-data:www-data storage/logs/laravel.log \
@@ -51,7 +54,6 @@ RUN php artisan key:generate
 
 # Exposer le port 8080
 EXPOSE 8080
-
 
 # Commande pour démarrer l'application
 CMD php artisan serve --host=0.0.0.0 --port=$PORT
