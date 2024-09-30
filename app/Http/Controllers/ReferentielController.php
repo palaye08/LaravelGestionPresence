@@ -30,8 +30,17 @@ class ReferentielController extends Controller
     public function getReferentielsByEtat(Request $request)
     {
         $etat = $request->query('etat');
-        $referentiels = $this->serviceReferentiel->getReferentielsByEtat($etat);
-        return response()->json($referentiels);
+    
+        if (empty($etat)) {
+            return response()->json(['error' => 'Le paramètre etat est requis'], 400);
+        }
+    
+        try {
+            $referentiels = $this->serviceReferentiel->getReferentielsByEtat($etat);
+            return response()->json($referentiels);
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'Une erreur est survenue lors de la récupération des référentiels'], 500);
+        }
     }
     public function getReferentielCompetences($id)
     {

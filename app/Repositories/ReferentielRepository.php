@@ -59,9 +59,18 @@ class ReferentielRepository implements ReferentielRepositoryInterface
     
     public function getReferentielsByEtat($etat)
     {
-        return $this->model->where('etat', $etat)->get();
+        $allReferentiels = $this->database->getReference($this->tableName)->getValue();
+        
+        $filteredReferentiels = [];
+        foreach ($allReferentiels as $key => $referentiel) {
+            if (isset($referentiel['etat']) && $referentiel['etat'] === $etat) {
+                $referentiel['id'] = $key; 
+                $filteredReferentiels[] = $referentiel;
+            }
+        }
+        
+        return $filteredReferentiels;
     }
-
     public function softDeleteReferentiel($id)
     {
         return $this->model->softDelete($id);

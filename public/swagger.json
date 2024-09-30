@@ -5,7 +5,12 @@
         "version": "1.0.0",
         "description": "Documentation of API endpoints for the application"
     },
-   "components": {
+    "servers": [
+        {
+            "url": "http://localhost:8000",
+            "description": "Serveur Local"
+        }
+    ],"components": {
         "securitySchemes": {
             "BearerAuth": {
                 "type": "http",
@@ -327,7 +332,7 @@
                 }
             }
         },
-        "/api/v1/referentiels": {
+        "/api/v1/referentiels/actif": {
             "get": {
                 "summary": "Get all active referentiels",
                 "description": "This endpoint is used to retrieve a list of active referentiels.",
@@ -420,7 +425,7 @@
                 }
             }
         },
-        "/api/v1/referentiels/etat": {
+        "/api/v1/referentiels": {
             "get": {
                 "summary": "Get referentiels by state",
                 "description": "This endpoint is used to retrieve referentiels by their state.",

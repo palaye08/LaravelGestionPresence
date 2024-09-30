@@ -42,9 +42,9 @@ Route::patch('/users/{id}', [UserController::class, 'update']);
 });
 Route::prefix('/')->group(function () {  
 // referentiels
-Route::get('/referentiels', [ReferentielController::class, 'getActiveReferentiels']);
+Route::get('/referentiels/actif', [ReferentielController::class, 'getActiveReferentiels']);
 Route::post('/referentiel', [ReferentielController::class, 'createReferentiel']);
-Route::get('/referentiels/etat', [ReferentielController::class, 'getReferentielsByEtat']);
+Route::get('/referentiels', [ReferentielController::class, 'getReferentielsByEtat']);
 Route::get('/referentiels/{id}/competences', [ReferentielController::class, 'getReferentielCompetences']);
 Route::get('/referentiels/{id}/modules', [ReferentielController::class, 'getReferentielModules']);
 Route::patch('/referentiels/{id}', [ReferentielController::class, 'updateReferentiel']);

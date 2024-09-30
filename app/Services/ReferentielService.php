@@ -92,7 +92,18 @@ class ReferentielService implements ReferentielServiceInterface
         }
         public function getReferentielsByEtat($etat)
         {
-            return $this->referentielRepository->getReferentielsByEtat($etat);
+            $allReferentiels = $this->database->getReference($this->tableName)->getValue();
+            
+            $filteredReferentiels = [];
+            
+            foreach ($allReferentiels as $key => $referentiel) {
+                if (isset($referentiel['etat']) && $referentiel['etat'] === $etat) {
+                    $referentiel['id'] = $key; // Ajouter l'ID à chaque référentiel
+                    $filteredReferentiels[] = $referentiel;
+                }
+            }
+            
+            return $filteredReferentiels;
         }
        
         public function getReferentielCompetences($id)
