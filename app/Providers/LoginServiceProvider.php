@@ -11,7 +11,7 @@ class LoginServiceProvider extends ServiceProvider
     public function register()
     {
         $this->app->bind(AuthServiceInterface::class, function ($app) {
-            $loginType = config('auth.login_type', 'mysql'); // Utiliser la valeur par défaut
+            $loginType = config('auth.login_type'); 
 
             if ($loginType === 'firebase') {
                 return new AuthServiceFirebase();
